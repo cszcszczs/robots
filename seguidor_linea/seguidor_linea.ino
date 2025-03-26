@@ -21,6 +21,7 @@ void setup() {
 }
 
 void loop() {
+  // Adelante
   digitalWrite(Ain1, LOW);
   digitalWrite(Ain2, HIGH);
 
@@ -29,6 +30,7 @@ void loop() {
 
   delay(2000);
 
+  //Atras
   digitalWrite(Ain1, HIGH);
   digitalWrite(Ain2, LOW);
 
