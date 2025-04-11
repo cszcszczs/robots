@@ -64,6 +64,7 @@ void loop() {
   } else if (valorSensorDer == HIGH && valorSensorIzq == HIGH) {
     // si ambos sensores detectan el borde blanco, detener los motores
     detenerMotores();
+    retroceder();
   } else if (valorSensorIzq == LOW) {
     // si el sensor izquierdo detecta el dojo negro, girar hacia la derecha
     girarDerecha();
