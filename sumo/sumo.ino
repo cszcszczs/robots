@@ -1,10 +1,11 @@
 // pines para los sensores infrarojos
-const int sensor1 = 2;
-const int sensor2 = 3;
+const int sensorDer = A0;
+const int sensorIzq = A1;
+const int sensorAtras = A2;
 
 // pines sensor ultrasonico
-const int triggerPin = 4;
-const int echoPin = 5;
+const int triggerPin = 3;
+const int echoPin = 4;
 
 // pines de los motores
 const int velA = 6;
@@ -19,16 +20,18 @@ const int Bin2 = 10;
 const int velocidadMaxima = 150;
 
 // Definir variables para los valores de los sensores (para saber cuando esta apunto de salirse el robot)
-int valorSensor1;
-int valorSensor2;
+int valorSensorDer;
+int valorSensorIzq;
+int valorSensorAtras;
 
 // Definir variable para la distancia detectada para el sensor ultrasonico
 float distancia;
 
 void setup() {
   // Inicializar los pines de los sensores infrarojos como entradas
-  pinMode(sensor1, INPUT);
-  pinMode(sensor2, INPUT);
+  pinMode(sensorDer, INPUT);
+  pinMode(sensorIzq, INPUT);
+  pinMode(sensorAtras, INPUT);
 
   // Inicializar los pines del sensor ultrasonico como entrada y salida
   pinMode(triggerPin, OUTPUT);
@@ -48,8 +51,9 @@ void setup() {
 
 void loop() {
   // leer los valores de los sensores
-  valorSensor1 = digitalRead(sensor1);
-  valorSensor2 = digitalRead(sensor2);
+  valorSensorDer = analogRead(sensorDer);
+  valorSensorIzq = analogRead(sensorIzq);
+  valorSensorAtras = analogRead(sensorAtras);
 
   // leer la distancia detectada por el sensor
   distancia = medirDistancia();
@@ -57,15 +61,18 @@ void loop() {
   // si la distancia es menor a 40 cm, avanzar hacia el objeto detectado
   if (distancia < 40) {
     avanzarRecto();
-  } else if (valorSensor1 == HIGH && valorSensor2 == HIGH) {
+  } else if (valorSensorDer == HIGH && valorSensorIzq == HIGH) {
     // si ambos sensores detectan el borde blanco, detener los motores
     detenerMotores();
-  } else if (valorSensor1 == LOW) {
+  } else if (valorSensorIzq == LOW) {
     // si el sensor izquierdo detecta el dojo negro, girar hacia la derecha
     girarDerecha();
-  } else if (valorSensor2 == LOW) {
+  } else if (valorSensorDer == LOW) {
     // si el sensor derecho detecta el dojo negro, girar hacia la izquierda
     girarIzquierda();
+  } else if (valorSensorAtras == HIGH) {
+    // si el sensor trasero detecta el borde blanco, avanzar recto
+    avanzarRecto();
   } else {
     // si ninguno de los sensores detecta el borde blanco ni el dojo negro, ni hay objetos cercanos, avanzar recto
     avanzarRecto();
