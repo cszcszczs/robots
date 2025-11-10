@@ -1,2 +1,7 @@
-robot-arquitectura/*
-!robot-arquitectura/robot-arquitectura.pdsprj
+line_rider-architecture/*
+!line_rider-architecture/robot-arquitectura.pdsprj
+
+sumo-architecture/*
+!sumo-architectue/image
+!sumo-architectue/robot-sumo.kicad_pcb
+!sumo-architectue/robot-sumo.kicad_sch
