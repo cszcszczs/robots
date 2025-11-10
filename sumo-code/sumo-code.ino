@@ -28,8 +28,7 @@ bool pressed = false;
 
 const int BTN_PIN = 4;
 
-template <size_t N>
-void calibrar_sensores(IR (&sensores)[N], uint16_t pin, uint8_t n) {
+void calibrar_sensores(IR (&sensores)[8], uint16_t pin, uint8_t n) {
   for (size_t i = 0; i < n; i++) {
     int blanco = sensores[i].calibrar_color(pin);
     delay(1500);
@@ -49,8 +48,6 @@ void calibrar_sensores(IR (&sensores)[N], uint16_t pin, uint8_t n) {
 void setup() {
   Serial.begin(9600);
 
-  /*pinMode(IR_A, INPUT);
-  pinMode(IR_B, INPUT);*/
   pinMode(BTN_PIN, INPUT);
 
   pinMode(TRIG_PIN, OUTPUT);
@@ -78,67 +75,65 @@ void setup() {
 }
 
 void loop() {
+  // go to backward
+  if (!sensores[0].value() && !sensores[1].value()) {
+    backward();
+    attack = false;
+    sum = 0;
+  }
+  // turn right
+  else if (!sensores[0].value() && sensores[1].value()) {
+    turn_right();
+    attack = false;
+    last_turn = true;
+    sum++;
+  }
+  // turn left
+  else if (sensores[0].value() && !sensores[1].value()) {
+    turn_left();
+    attack = false;
+    last_turn = false;
+    sum++;
+  }
+  // go to forward  
   else {
-    // go to backward
-    if (!sensores[0].value() && !sensores[1].value()) {
-      backward();
-      attack = false;
-      sum = 0;
+    ult_sensor();
+
+    if (attack) {
+      motors.set_pwa(255);
+      motors.set_pwb(235);
+      motors.forward();
+      count_turn = 0;
+
+      if (distance > 30) {
+        attack = false;
+      }
     }
-    // turn right
-    else if (!sensores[0].value() && sensores[1].value()) {
-      turn_right();
-      attack = false;
-      last_turn = true;
-      sum++;
+    else if (enemy_in_distance()) {
+      before_attack();
     }
-    // turn left
-    else if (sensores[0].value() && !sensores[1].value()) {
-      turn_left();
-      attack = false;
-      last_turn = false;
-      sum++;
-    }
-    // go to forward  
     else {
-      ult_sensor();
-
-      if (attack) {
-        motors.set_pwa(255);
-        motors.set_pwb(235);
-        motors.forward();
+      if (count_turn >= 3) {
+        bool next = false;
         count_turn = 0;
-
-        if (distance > 30) {
-          attack = false;
-        }
-      }
-      else if (enemy_in_distance()) {
-        before_attack();
-      }
-      else {
-        if (count_turn >= 3) {
-          bool next = false;
-          count_turn = 0;
-          motors.set_pwa(150);
-          motors.set_pwb(150);
-          
-          if (last_turn) {
-            motors.A_forward();
-            motors.B_backward();
-            delay(100);
-          }
-          else {
-            motors.B_forward();
-            motors.A_backward();
-            delay(100);
-          }
+        motors.set_pwa(150);
+        motors.set_pwb(150);
+        
+        if (last_turn) {
+          motors.A_forward();
+          motors.B_backward();
+          delay(100);
         }
         else {
-          motors.set_pwa(50); //100
-          motors.set_pwb(60); // 90
-          motors.forward();
+          motors.B_forward();
+          motors.A_backward();
+          delay(100);
         }
+      }
+      else {
+        motors.set_pwa(50); //100
+        motors.set_pwb(60); // 90
+        motors.forward();
       }
     }
   }
