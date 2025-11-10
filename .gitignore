@@ -5,3 +5,4 @@ sumo-architecture/*
 !sumo-architecture/image
 !sumo-architecture/robot-sumo.kicad_pcb
 !sumo-architecture/robot-sumo.kicad_sch
+!sumo-architecture/robot-sumo-backups
