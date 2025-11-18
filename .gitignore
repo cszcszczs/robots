@@ -1,2 +1,8 @@
-robot-arquitectura/*
-!robot-arquitectura/robot-arquitectura.pdsprj
+line_rider-architecture/*
+!line_rider-architecture/robot-arquitectura.pdsprj
+
+sumo-architecture/*
+!sumo-architecture/image
+!sumo-architecture/robot-sumo.kicad_pcb
+!sumo-architecture/robot-sumo.kicad_sch
+!sumo-architecture/robot-sumo-backups
